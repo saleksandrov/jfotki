@@ -1,0 +1,154 @@
+MagicDrawUML "7.0"
+(RTManager
+	(RTManagerOptions
+		CODE_GENERATION_REVERSE_OPTION 2
+		DELETED_ELEMENT_GENERATION_OPTION 0
+		USE_CLASSPATH_FOR_JAVA_REVERSE TRUE
+		LAUNCH_WIZARD FALSE
+		MERGE_AFTER_REVERSE FALSE
+		CREATE_ATTRIBUTES TRUE
+		DEFAULT_WORKING_DIRECTORY "C:\\Program Files\\MagicDraw UML 7.0"
+		DEFAULT_LANGUAGE "Java"
+		(JavaLanguageOptions
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			(DocumentationTagManager
+				(CLASSIFIER
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+				)
+				(OPERARTION
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@param"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@return"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@throws"
+						mGenerate "true"
+					)
+				)
+				(ATTRIBUTE
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+				)
+			)
+			COLLECT_IMPORTS_ON_DEMAND TRUE
+			mGenerateDocumentation TRUE
+			mUseClassPath TRUE
+			mClassPath "C:\\Program Files\\MagicDraw UML 7.0/lib/xalan.jar;C:\\Program Files\\MagicDraw UML 7.0/lib/jaxp.jar;C:\\Program Files\\MagicDraw UML 7.0/lib/crimson.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\rt.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\i18n.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\sunrsasign.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\jsse.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\jce.jar;c:\\java\\j2sdk1.4.1_03\\jre\\lib\\charsets.jar;c:\\java\\j2sdk1.4.1_03\\jre\\classes"
+			mClassCountForImportOnDemand 10
+		)
+		(CppLanguageOptions
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			mGenerateDocumentation TRUE
+			mCommentsStyle 0
+			mDocumentationOption FALSE
+			mGenerateMethodBodyInClass FALSE
+			mUseIncludePath FALSE
+			mUseMacros TRUE
+			mIncludePath ""
+		)
+		(IDLLanguageOptions
+			mTranslationLang "IDL"
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			(DocumentationTagManager
+				(CLASSIFIER
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+				)
+				(OPERARTION
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@param"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@return"
+						mGenerate "true"
+					)
+					(DocumentationTagProperty
+						mName "@throws"
+						mGenerate "true"
+					)
+				)
+				(ATTRIBUTE
+					(DocumentationTagProperty
+						mName "DESCRIPTION"
+						mGenerate "true"
+					)
+				)
+			)
+			mGenerateDocumentation TRUE
+		)
+		(DDLLanguageOptions
+			mGenerateDocumentation TRUE
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			mGenerateDocumentation TRUE
+		)
+		DEFAULT_WORKING_DIRECTORY "C:\\Program Files\\MagicDraw UML 7.0"
+		TEMP_DIRECTORY "Active Directory"
+		(C#LanguageOptions
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			mGenerateDocumentation TRUE
+			CSH_CONCAT_NAMESPACE_NAMES TRUE
+			CSH_COLLECT_USINGS TRUE
+			mDefines( list
+			)
+		)
+		mResultToDiagram 1
+		(CORBAIDLLanguageOptions
+			mGenEmptyDoc FALSE
+			mBracketInNewLine TRUE
+			mAddSpaces TRUE
+			mCommentStyle 0
+			mUseJavaDoc FALSE
+			mDefaultHeader "@(#) $FILE_NAME"
+			mGenerateDocumentation TRUE
+		)
+	)
+	(RTProjectGroupObject
+		mID "1da304ce_1103101870755_884740_1972"
+		mName "Code engineering sets"
+	)
+)

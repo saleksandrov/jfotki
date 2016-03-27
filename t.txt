@@ -1,0 +1,3 @@
+BUILD FAILED
+E:\PROJECTS\my\jfotki\build.xml:142: java.sql.SQLException: ORA-00942: ×נסûר¡נ רûר ÿ¨ץפ¸×נעûץ‎רץ ÿ‏û¹ק‏ענ×ץû  ‎ץ ¸÷•ץ¸×ע
+÷ץ×

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>	
+    <bean id="config" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="WEB-INF/config.properties"/>
+    </bean>
+
+    <bean id="securityManager" class="com.asv.jfotki.common.security.impl.ApplicationSecurityManagerImpl">
+        <property name="securityAdapter" ref="securityAdapter"/>
+        <property name="securityService" ref="securityService"/>
+    </bean>
+
+    <bean id="securityAdapter" class="com.asv.jfotki.common.security.impl.JBossPortalSecurityAdapter"/>
+
+</beans>

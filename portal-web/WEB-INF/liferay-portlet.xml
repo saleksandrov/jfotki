@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE portlets PUBLIC "-//Liferay//DTD PORTLET 2.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet_2_2_0.dtd">
+
+<portlets>
+	<portlet id="JFotkiPortlet"     use-default-template="true" />
+	<portlet id="HelloWorldPortlet" use-default-template="true"  />
+</portlets>

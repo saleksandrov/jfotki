@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes"?>
+<instances>
+   <instance>
+      <instance-name>HelloWorldPortletInstance</instance-name>
+      <component-ref>HelloWorldPortlet</component-ref>
+   </instance>
+   <instance>
+      <instance-name>JFotkiPortletInstance</instance-name>
+      <component-ref>JFotkiPortlet</component-ref>
+   </instance>
+</instances>

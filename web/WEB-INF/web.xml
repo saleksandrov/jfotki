@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE web-app PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <display-name>JFotki Application</display-name>
+    <description>JFotki application.</description>
+
+    <!-- Spring -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring/application*.xml</param-value>
+    </context-param>
+
+    <!-- JavaServer Faces -->
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/jsf/faces-config.xml,/WEB-INF/jsf/faces-managed-beans.xml,/WEB-INF/jsf/faces-navigation.xml</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>ErrorFilter</filter-name>
+        <filter-class>com.asv.jfotki.web.servlet.filter.ErrorFilter</filter-class>
+    </filter>
+
+    <filter>
+          <filter-name>Acegi Filter Chain Proxy</filter-name>
+          <filter-class>net.sf.acegisecurity.util.FilterToBeanProxy</filter-class>
+          <init-param>
+              <param-name>targetClass</param-name>
+              <param-value>net.sf.acegisecurity.util.FilterChainProxy</param-value>
+          </init-param>
+     </filter>
+
+      <filter-mapping>
+        <filter-name>Acegi Filter Chain Proxy</filter-name>
+        <url-pattern>/*</url-pattern>
+      </filter-mapping>
+
+
+    <filter-mapping>
+        <filter-name>ErrorFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+           <listener-class>net.sf.acegisecurity.ui.session.HttpSessionEventPublisher</listener-class>
+       </listener>
+    
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>InitServlet</servlet-name>
+        <servlet-class>com.asv.jfotki.web.servlet.InitServlet</servlet-class>
+        <init-param>
+            <param-name>log4j.config.file</param-name>
+            <param-value>WEB-INF/log4j.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>log4.logs.path</param-name>
+            <param-value>./log4j</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <display-name>image</display-name>
+        <description>Servlet for loading image</description>
+        <servlet-class>com.asv.jfotki.web.servlet.ImageServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <display-name>upload</display-name>
+        <description>Servlet for uploading image</description>
+        <servlet-class>com.asv.jfotki.web.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+
+
+    <!-- Faces Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/image/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <url-pattern>/upload/*</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>400</error-code>
+        <location>/index.jsp</location>
+    </error-page>
+
+</web-app>

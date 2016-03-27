@@ -1,0 +1,10 @@
+<portlet-app>
+   <portlet>
+      <portlet-name>JFotkiPortlet</portlet-name>
+      <security></security>
+   </portlet>
+   <portlet>
+      <portlet-name>HelloWorldPortlet</portlet-name>
+      <security></security>
+   </portlet>
+</portlet-app>

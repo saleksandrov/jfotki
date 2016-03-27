@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.asv.jfotki.model">
+
+	<class name="User" table="SECURITY_USER" >
+		<id name="id" column="A_ID" >
+<!--			<generator class="sequence">-->
+<!--                <param name="sequence">SECURITY_USER_SEQ</param>-->
+<!--            </generator>-->
+            <generator class="native"/>
+		</id>
+		<property name="username" column="A_USERNAME" not-null="true" unique="true"  />
+		<property name="password" column="A_PASSWORD" not-null="true" />
+		<property name="email"    column="A_EMAIL" />
+		<property name="fullName" column="A_FULLNAME" />
+		<property name="enabled"  column="A_ENABLED" />
+        <bag name="roles" table="SECURITY_ROLE_USER">
+            <key column="A_USER_ID" not-null="true" />
+            <many-to-many class="Role">
+                <column name="A_ROLE_ID" not-null="true"/>
+            </many-to-many>
+        </bag>
+	</class>
+
+</hibernate-mapping>

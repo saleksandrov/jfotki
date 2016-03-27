@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="location" value="WEB-INF/config.properties"/>
+    </bean>
+    <!--
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${jdbc.jndiName}"/>
+    </bean>
+    -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"   value="${jdbc.driverClassName}"/>
+		<property name="url"               value="${jdbc.url}"/>
+		<property name="username"          value="${jdbc.username}"/>
+		<property name="password"          value="${jdbc.password}"/>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"/>
+        <property name="maxWait"           value="${jdbc.maxWait}"/>
+	</bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor" lazy-init="true"/>
+
+    <bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler" lazy-init="true">
+      <property name="nativeJdbcExtractor"><ref local="nativeJdbcExtractor"/></property>
+    </bean>
+
+    <bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"/>
+
+    <bean id="lobHandler" class="com.asv.jfotki.util.LobSelector" lazy-init="true">
+        <property name="hibernateDialect" value="${hibernate.dialect}"/>
+    </bean>
+
+    <bean id="userServiceTarget" class="com.asv.jfotki.business.services.impl.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
+        <property name="roleDAO" ref="roleDAO"/>
+    </bean>
+
+    <bean id="pictureServiceTarget" class="com.asv.jfotki.business.services.impl.PictureServiceImpl">
+        <property name="pictureDAO" ref="pictureDAO"/>
+        <property name="albumDAO"   ref="albumDAO"/>
+        <property name="userDAO"    ref="userDAO"/>
+    </bean>
+
+    <bean id="securityServiceTarget" class="com.asv.jfotki.business.services.impl.SecurityServiceImpl">
+        <property name="securityDAO" ref="securityDAO"/>
+    </bean>
+
+    <bean id="userService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref local="transactionManager"/></property>
+		<property name="target"><ref local="userServiceTarget"/></property>
+		<property name="transactionAttributes">
+			<props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="create*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="register*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="pictureService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref local="transactionManager"/></property>
+		<property name="target"><ref local="pictureServiceTarget"/></property>
+		<property name="transactionAttributes">
+			<props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="next*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+        <property name="preInterceptors">
+            <list>
+                <ref bean="albumOwnerSecurityAdvisor"/>
+                <ref bean="cacheAdvisor"/>
+            </list>
+        </property>
+	</bean>
+
+    <bean id="securityService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref local="transactionManager"/></property>
+		<property name="target"><ref local="securityServiceTarget"/></property>
+		<property name="transactionAttributes">
+			<props>
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+
+    <bean id="cacheAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="mappedNames">
+            <list>
+                <value>getSmallImage</value>
+            </list>
+        </property>
+        <property name="advice">
+            <ref bean="cacheInterceptor"/>
+        </property>
+    </bean>
+
+    <bean id="cacheInterceptor" class="com.asv.jfotki.business.interceptors.PictureCacheInterceptor">
+        <property name="cacheEnable" value="${cache.enable}"/>
+        <property name="cacheAccessFactory">
+            <bean class="javax.util.jcache.CacheAccessFactory" factory-method="getInstance" />
+        </property>
+    </bean>
+
+    <bean id="albumOwnerSecurityAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="mappedNames">
+            <list>
+                <value>deletePicture</value>
+                <value>createAlbum</value>
+                <value>createPicture</value>
+            </list>
+        </property>
+        <property name="advice">
+            <ref bean="albumOwnerSecurityInterceptor"/>
+        </property>
+    </bean>
+
+    <bean id="albumOwnerSecurityInterceptorTarget" class="com.asv.jfotki.business.interceptors.AlbumOwnerSecurityInterceptor" >
+        <property name="pictureDAO"  ref="pictureDAO"/>
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean id="albumOwnerSecurityInterceptor" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref local="transactionManager"/></property>
+		<property name="target"><ref local="albumOwnerSecurityInterceptorTarget"/></property>
+		<property name="transactionAttributes">
+			<props>
+                <prop key="invoke*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>
+
+

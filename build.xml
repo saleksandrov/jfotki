@@ -1,0 +1,204 @@
+<?xml version = '1.0' encoding = 'windows-1251'?>
+<project name="my.fotki" default="compile" basedir=".">
+
+    <target name="clean" depends="init" description="remove compiled files">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile" depends="init" description="quick compile modified classes (default target)">
+        <antcall target="compile-to">
+            <param name="to" value="build/classes"/>
+        </antcall>
+    </target>
+  
+    <target name="deploy" depends="init" description="quick deploy to local server">
+        <echo message="deploing into ${server.app.home} ..."/>
+        <echo message=""/>
+
+        <delete dir="${server.app.home}"/>
+
+        <copy todir="${server.app.home}">
+            <fileset dir="web" includes="**/*.*">
+                <exclude name="**/.*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${server.app.home}/WEB-INF/lib">
+            <fileset dir="lib">
+                <exclude name="jsf-portlet.jar"/>
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <antcall target="compile-to">
+            <param name="to" value="${server.app.home}/WEB-INF/classes"/>
+        </antcall>
+    </target>
+
+    <target name="build" depends="clean, compile" description="rebuild files in the project"/>
+
+    <target name="jar" depends="compile" description="make jar file">
+        <jar jarfile="build/${app.name}.jar">
+            <fileset dir="build/classes" includes="**/*.*"/>
+        </jar>
+    </target>
+
+    <target name="war" depends="jar">
+        <war warfile="build/${app.name}.war" webxml="web/WEB-INF/web.xml">
+            <lib dir="build">
+                <include name="${app.name}.jar"/>
+            </lib>
+            <lib dir="lib">
+                <exclude name="jsf-portlet.jar"/>
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </lib>
+            <webinf dir="web/WEB-INF">
+                <include name="**/*.*"/>
+                <exclude name="web.xml"/>
+            </webinf>
+            <fileset dir="web">
+                <include name="**/*"/>
+                <exclude name="WEB-INF/**/*.*"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="portal-war" depends="jar">
+        <war warfile="build/${app.name}.war" webxml="portal-web/WEB-INF/web.xml">
+            <lib dir="build">
+                <include name="${app.name}.jar"/>
+            </lib>
+            <lib dir="lib">
+                <exclude name="acegi*.jar"/>
+                <exclude name="clover.jar"/>
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </lib>
+            <webinf dir="portal-web/WEB-INF">
+                <include name="**/*.*"/>
+                <exclude name="web.xml"/>
+            </webinf>
+            <fileset dir="portal-web">
+                <include name="**/*"/>
+                <exclude name="WEB-INF/**/*.*"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="javadoc" depends="init">
+        <mkdir dir="build/doc"/>
+        <javadoc sourcepath="src" destdir="docs/api" encoding="Cp1251"
+             packagenames="com.asv.**.*"
+             classpathref="build.classpath"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="JFotki Javadoc">
+        </javadoc>
+    </target>
+
+    <target name="test" depends="build">
+        <mkdir dir="build/test"/>
+        <delete><fileset dir="build/test" includes="**/*.txt"/></delete>
+
+        <junit printsummary="withOutAndErr">
+            <classpath refid="run.classpath"/>
+            <formatter type="plain"/>
+            <batchtest todir="build/test">
+                <fileset dir="test">
+                    <exclude name="**/AbstractTest.java"/> 
+                    <include name="**/*ServiceTest.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="test.xml" depends="build" description="run all unit tests or concrete testcase as parameter -Dtestcase">
+        <mkdir dir="build/reports/xml"/>
+        <delete><fileset dir="build/reports/xml" includes="**/*.xml"/></delete>
+
+        <junit printsummary="yes" haltonfailure="no" fork="true" >
+            <jvmarg value="-ea"/>
+            <classpath refid="run.classpath"/>
+            <formatter type="xml" />
+            <formatter type="brief" usefile="false" />
+            <batchtest todir="build/reports/xml">
+                <fileset dir="test">
+                    <exclude name="**/AbstractTest.java"/>
+                    <include name="**/*ServiceTest.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail if="test.failed">Unit tests failed. For error messages, check the log files in ${build.test.data} or run "ant test.reports" to generate reports at ${build.test}/reports</fail>
+    </target>
+
+    <target name="test.reports" depends="test.xml" description="Generate test reports">
+        <junitreport todir="build/reports">
+            <fileset dir="build/reports/xml">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" todir="build/reports" />
+        </junitreport>
+        <exec dir="build/reports" executable="explorer.exe">
+            <arg line="index.html" />
+        </exec>
+    </target>
+
+    <target name="compile-to" depends="init">
+        <mkdir dir="${to}"/>
+        <depend srcdir="src,test" destdir="${to}" closure="yes">
+          <include name="**/*.java"/>
+        </depend>
+        <javac destdir="${to}" classpathref="build.classpath"
+               deprecation="${build.deprecation}" optimize="${build.optimized}" nowarn="${build.nowarn}"
+               debug="${build.debug}" debugLevel="${build.debug.level}">
+          <src path="src"/>
+          <src path="test"/>
+        </javac>
+        <copy todir="${to}">
+          <fileset dir="src">
+            <patternset refid="all.config.files"/>
+          </fileset>
+        </copy>
+        <native2ascii encoding="Cp1251" src="properties" dest="${to}" includes="**/*.properties" />
+        <native2ascii encoding="Cp1251" src="src" dest="${to}" includes="**/*_ru.properties" />
+    </target>
+
+    <import file="./build_init.xml"/>
+
+    <target name="export" depends="init">
+        <java classname="com.asv.jfotki.client.ExportUtil" classpathref="build.classpath" >
+           <arg value="${exportdir}" />
+            <classpath>
+               <pathelement path="${java.class.path}"/>
+             </classpath>
+        </java>
+    </target>
+
+    <target name="import" depends="init">
+        <java classname="com.asv.jfotki.client.ImportUtil" classpathref="build.classpath" >
+           <arg value="${exportdir}" />
+            <classpath>
+               <pathelement path="${java.class.path}"/>
+             </classpath>
+        </java>
+    </target>
+
+    <taskdef resource="clovertasks"/>
+    <typedef resource="clovertypes"/>
+
+    <target name="with.clover">
+        <clover-setup initString="build/clover.db">
+            <files includes="src/**/*.java"/>
+        </clover-setup>
+    </target>
+
+    <target name="clover.html" depends="with.clover, test.xml">
+        <clover-report>
+            <current outfile="build/clover">
+                <format type="html"/>
+            </current>
+        </clover-report>
+    </target>
+
+</project>

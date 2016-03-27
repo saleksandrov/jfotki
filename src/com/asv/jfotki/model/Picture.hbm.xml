@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.asv.jfotki.model">
+
+	<class name="Picture" table="PICTURE" polymorphism="explicit" >
+		<id name="id" column="A_ID" >
+<!--			<generator class="sequence">-->
+<!--                <param name="sequence">PICTURE_SEQ</param>-->
+<!--            </generator>-->
+            <generator class="native"/>
+		</id>
+		<property name="name" column="A_NAME" />
+		<property name="description" column="A_DESCRIPTION" />
+		<property name="note" column="A_NOTE" />
+        <many-to-one name="album" class="Album" column="A_ALBUM_ID" />
+        <property name="bigPicture"
+                  column="A_BIG_PICTURE"
+                  length="16777215"   
+                  type="org.springframework.orm.hibernate3.support.BlobByteArrayType"/>
+        <property name="smallPicture"
+                  column="A_SMALL_PICTURE"
+                  type="org.springframework.orm.hibernate3.support.BlobByteArrayType"/>
+	</class>
+
+</hibernate-mapping>

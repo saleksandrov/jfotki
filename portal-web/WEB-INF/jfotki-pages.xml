@@ -1,0 +1,25 @@
+<pages>
+    <portal-name>default</portal-name>
+    <page>
+        <page-name>helloworld</page-name>
+        <window>
+            <window-name>HelloWorldPortletWindow</window-name>
+            <instance-ref>jfotki.HelloWorldPortlet.HelloWorldPortletInstance</instance-ref>
+            <default>true</default>
+            <region>center</region>
+            <height>0</height>
+        </window>
+    </page>
+
+    <page>
+        <page-name>jfotki</page-name>
+        <window>
+            <window-name>JFotkiPortletWindow</window-name>
+            <instance-ref>jfotki.JFotkiPortlet.JFotkiPortletInstance</instance-ref>
+<!--            <default>true</default>-->
+            <region>center</region>
+            <height>0</height>
+        </window>
+    </page>
+
+</pages>
